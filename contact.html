@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact · Launch Development Group</title>
+<meta name="description" content="Contact Launch Development Group about buying or leasing a hangar, or about a development at your airport.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Launch Development Group, home">
+      <span class="brand-mark">LDG</span>
+      <span class="brand-name">Launch Development Group</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="hangars.html">Hangars</a>
+      <a href="who-we-are.html">Who we are</a>
+      <a href="contact.html" aria-current="page">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap stack">
+      <span class="label">Contact</span>
+      <h1>Talk to us about a hangar</h1>
+      <p class="lede">Buying a unit at Falcon Field, getting on the Sugar Land list, or offering land at your airport. One of the founders will reply.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="contact-list">
+        <div>
+          <span class="label">Email</span>
+          <p><a href="mailto:inquiries@launchdg.com">inquiries@launchdg.com</a></p>
+        </div>
+        <div>
+          <span class="label">Phone</span>
+          <p class="num"><a href="tel:+18014203159">+1 801-420-3159</a></p>
+        </div>
+        <div>
+          <span class="label">Office</span>
+          <p>88 W 4420 N<br>Provo, UT 84604</p>
+        </div>
+      </div>
+
+      <form class="form" id="contact-form" novalidate>
+        <div class="row-2">
+          <div class="field">
+            <label for="cf-name">Name</label>
+            <input id="cf-name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label for="cf-phone">Phone (optional)</label>
+            <input id="cf-phone" name="phone" type="tel" autocomplete="tel">
+          </div>
+          <div class="field">
+            <label for="cf-topic">I'm asking about</label>
+            <select id="cf-topic" name="topic">
+              <option>Buying a hangar at Falcon Field</option>
+              <option>Sugar Land updates</option>
+              <option>Development at my airport</option>
+              <option>Investing</option>
+              <option>Something else</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="cf-msg">Message</label>
+          <textarea id="cf-msg" name="message" placeholder="Aircraft type, timing, anything else we should know."></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn" type="submit">Send message <span class="arrow" aria-hidden="true">→</span></button>
+        </div>
+        <p class="form-msg" id="cf-status" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="stack">
+      <a class="brand" href="index.html"><span class="brand-mark">LDG</span><span class="brand-name">Launch Development Group</span></a>
+      <p class="fine">88 W 4420 N, Provo, UT 84604</p>
+      <p class="fine">© 2026 Launch Development Group LLC</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="hangars.html">Hangars</a>
+      <a href="who-we-are.html">Who we are</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="stack">
+      <p>inquiries@launchdg.com</p>
+      <p class="num">+1 801-420-3159</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Opens the visitor's email app with the message filled in.
+  // Swap for a form service (Formspree, Resend) when one is set up.
+  document.getElementById('contact-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target, status = document.getElementById('cf-status');
+    if (!f.name.value.trim() || !f.email.checkValidity() || !f.email.value) {
+      status.textContent = 'Add your name and a valid email address so we can reply.';
+      status.hidden = false;
+      return;
+    }
+    var body = [f.message.value, '', f.name.value, f.email.value, f.phone.value].join('\n');
+    var href = 'mailto:inquiries@launchdg.com?subject=' + encodeURIComponent(f.topic.value) +
+      '&body=' + encodeURIComponent(body);
+    status.textContent = 'Your email app should open with this message. If it doesn\'t, write to inquiries@launchdg.com.';
+    status.hidden = false;
+    window.location.href = href;
+  });
+</script>
+</body>
+</html>
