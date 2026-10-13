@@ -36,7 +36,7 @@
     <div class="wrap stack">
       <span class="label">Contact</span>
       <h1>Talk to us about a hangar</h1>
-      <p class="lede">Buying a unit at Falcon Field, getting on the Sugar Land list, or offering land at your airport. One of the founders will reply.</p>
+      <p class="lede">Buying a unit at Falcon Field, getting on the Sugar Land list, or offering land at your airport. Fill out the form and it comes straight to Andrew, who will get back to you.</p>
     </div>
   </section>
 
@@ -44,12 +44,16 @@
     <div class="wrap split">
       <div class="contact-list">
         <div>
+          <span class="label">Contact</span>
+          <p>Andrew Freedman</p>
+        </div>
+        <div>
           <span class="label">Email</span>
-          <p><a href="mailto:inquiries@launchdg.com">inquiries@launchdg.com</a></p>
+          <p><a href="mailto:Andrew@launchdg.com">Andrew@launchdg.com</a></p>
         </div>
         <div>
           <span class="label">Phone</span>
-          <p class="num"><a href="tel:+18014203159">+1 801-420-3159</a></p>
+          <p class="num"><a href="tel:+13853716576">385-371-6576</a></p>
         </div>
         <div>
           <span class="label">Office</span>
@@ -57,7 +61,12 @@
         </div>
       </div>
 
-      <form class="form" id="contact-form" novalidate>
+      <form class="form" id="contact-form" action="https://formsubmit.co/andrew@launchdg.com" method="POST" novalidate>
+        <input type="hidden" name="_subject" value="New inquiry from launchdg.com">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <!-- Spam trap: people never see this field, bots fill it in. -->
+        <input class="trap" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="row-2">
           <div class="field">
             <label for="cf-name">Name</label>
@@ -86,7 +95,7 @@
         </div>
         <div class="field">
           <label for="cf-msg">Message</label>
-          <textarea id="cf-msg" name="message" placeholder="Aircraft type, timing, anything else we should know."></textarea>
+          <textarea id="cf-msg" name="message" required placeholder="Aircraft type, timing, anything else we should know."></textarea>
         </div>
         <div class="actions">
           <button class="btn" type="submit">Send message <span class="arrow" aria-hidden="true">↗</span></button>
@@ -102,7 +111,7 @@
     <div class="footer-top">
       <div>
         <a class="wordmark" href="index.html" aria-label="Launch Development Group, home">LDG</a>
-        <p class="footer-tag">Corporate and private aircraft hangars, designed, financed and built by pilots.</p>
+        <p class="footer-tag">Corporate and private aircraft hangars, designed and built by pilots.</p>
       </div>
       <nav aria-label="Footer">
         <span class="label">Site</span>
@@ -112,8 +121,9 @@
       </nav>
       <div class="stack">
         <span class="label">Contact</span>
-        <a href="mailto:inquiries@launchdg.com">inquiries@launchdg.com</a>
-        <a class="num" href="tel:+18014203159">+1 801-420-3159</a>
+        <p>Andrew Freedman</p>
+        <a href="mailto:Andrew@launchdg.com">Andrew@launchdg.com</a>
+        <a class="num" href="tel:+13853716576">385-371-6576</a>
         <p>88 W 4420 N<br>Provo, UT 84604</p>
       </div>
     </div>
@@ -125,22 +135,35 @@
 </footer>
 
 <script>
-  // Opens the visitor's email app with the message filled in.
-  // Swap for a form service (Formspree, Resend) when one is set up.
-  document.getElementById('contact-form').addEventListener('submit', function (e) {
+  // Sends the form to Andrew@launchdg.com through FormSubmit (formsubmit.co),
+  // which emails each submission. Without JS the form posts there directly.
+  var form = document.getElementById('contact-form');
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var f = e.target, status = document.getElementById('cf-status');
-    if (!f.name.value.trim() || !f.email.checkValidity() || !f.email.value) {
-      status.textContent = 'Add your name and a valid email address so we can reply.';
-      status.hidden = false;
+    var f = e.target, status = document.getElementById('cf-status'), btn = f.querySelector('button');
+    function say(msg) { status.textContent = msg; status.hidden = false; }
+    if (!f.name.value.trim() || !f.email.value || !f.email.checkValidity() || !f.message.value.trim()) {
+      say('Add your name, a valid email address and a message so we can reply.');
       return;
     }
-    var body = [f.message.value, '', f.name.value, f.email.value, f.phone.value].join('\n');
-    var href = 'mailto:inquiries@launchdg.com?subject=' + encodeURIComponent(f.topic.value) +
-      '&body=' + encodeURIComponent(body);
-    status.textContent = 'Your email app should open with this message. If it doesn\'t, write to inquiries@launchdg.com.';
-    status.hidden = false;
-    window.location.href = href;
+    f._subject.value = 'launchdg.com: ' + f.topic.value + ' (' + f.name.value.trim() + ')';
+    btn.disabled = true;
+    say('Sending…');
+    fetch('https://formsubmit.co/ajax/andrew@launchdg.com', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(f)
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (String(data.success) !== 'true') throw new Error(data.message || 'Not sent');
+        f.reset();
+        say('Thanks. Your message is on its way to Andrew, and he will reply to the email you gave.');
+      })
+      .catch(function () {
+        say('Something went wrong and your message was not sent. Please email Andrew@launchdg.com or call 385-371-6576.');
+      })
+      .then(function () { btn.disabled = false; });
   });
 </script>
 </body>

@@ -8,6 +8,7 @@ hangars.html      Projects: Falcon Field, Provo, Sugar Land
 who-we-are.html   Founders and partners
 contact.html      Contact details and form
 assets/site.css   All styles (brand colors are at the top)
+assets/scrolly.js Scroll-driven hangar drawing on the home page
 vercel.json       Serves /hangars instead of /hangars.html
 ```
 
@@ -46,5 +47,11 @@ changing them would interrupt email.
 - Founder headshots: put them in `assets/` and replace the initials in the `.portrait` blocks on
   `who-we-are.html` with `<img>` tags.
 - Hangar renderings and photos of the Provo hangar.
-- Connect the contact form to a form service (for example Formspree). For now it opens the
-  visitor's email app.
+## Contact form
+
+The form on `contact.html` sends each submission to Andrew@launchdg.com through
+[FormSubmit](https://formsubmit.co), a free service with no account. **The first time someone submits
+the form, FormSubmit emails Andrew@launchdg.com an activation link. Click it once**, and from then on
+every submission arrives as an email (replying goes straight to the visitor). FormSubmit's
+activation email also offers a random alias for the address; to keep the address out of the page
+source, replace `andrew@launchdg.com` in the form's `action` and in the `fetch` URL with that alias.

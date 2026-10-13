@@ -157,12 +157,44 @@ p { margin: 0; max-width: 62ch; }
 .drawing svg text { font-family: var(--mono); font-size: 11px; fill: var(--ink-2); letter-spacing: 0.04em; }
 .drawing figcaption { border-top: 1px solid var(--ink); padding-top: 10px; display: flex; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
 /* Line drawing on black, like a blueprint negative. */
-.hero .drawing svg .ln, .hero .drawing svg .thin { stroke: var(--paper); }
-.hero .drawing svg .fl { fill: var(--ink); stroke: var(--paper); }
-.hero .drawing svg .gl { fill: #1b1b17; stroke: var(--paper); }
-.hero .drawing svg .dim { stroke: var(--night-2); }
-.hero .drawing svg text { fill: var(--night-2); }
-.hero .drawing figcaption { border-top-color: var(--night-rule); }
+.scrolly .drawing svg .ln, .scrolly .drawing svg .thin { stroke: var(--paper); }
+.scrolly .drawing svg .fl { fill: var(--ink); stroke: var(--paper); }
+.scrolly .drawing svg .gl { fill: #1b1b17; stroke: var(--paper); }
+.scrolly .drawing svg .dim { stroke: var(--night-2); }
+.scrolly .drawing svg text { fill: var(--night-2); }
+.scrolly .drawing figcaption { border-top-color: var(--night-rule); }
+
+/* ---------- scroll-driven building (home) ---------- */
+/* Static by default: everything drawn, all steps listed. scrolly.js adds
+   .is-live, which makes the track tall and pins the stage while it plays. */
+.scrolly { background: var(--ink); color: var(--paper); padding-top: clamp(56px, 8vw, 112px); }
+.scrolly .label { color: var(--night-2); }
+.scrolly .section-head .lede { color: var(--paper); }
+.scrolly-stage { padding-block: 0 clamp(56px, 8vw, 112px); }
+.scrolly-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 32px clamp(32px, 6vw, 88px); align-items: center; }
+.scrolly-grid > * { min-width: 0; }
+.scrolly-steps ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.scrolly-steps li { display: grid; gap: 8px; padding-block: 18px; border-top: 1px solid var(--night-rule); }
+.scrolly-steps li p { color: var(--night-2); }
+.scrolly-count { display: none; margin-bottom: 18px; }
+.scrolly-bar { height: 1px; background: var(--night-rule); margin-top: 14px; display: none; }
+.scrolly-bar span { display: block; height: 100%; background: var(--paper); transform-origin: left; transform: scaleX(0); }
+
+.scrolly.is-live .scrolly-track { height: 420vh; }
+.scrolly.is-live .scrolly-stage {
+  position: sticky; top: 0; height: 100vh; height: 100svh;
+  display: grid; align-items: center; padding-block: 24px;
+}
+.scrolly.is-live .scrolly-count, .scrolly.is-live .scrolly-bar { display: block; }
+.scrolly.is-live .scrolly-steps li { opacity: 0.3; transition: opacity .3s; }
+.scrolly.is-live .scrolly-steps li.is-on { opacity: 1; }
+.scrolly.is-live [pathLength] { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.scrolly.is-live .fade { opacity: 0; }
+.scrolly-art svg { max-height: 68vh; }
+
+/* ---------- rings on black (hero) ---------- */
+.hero .ring strong { border-color: var(--night-2); }
+.hero .ring span { color: var(--night-2); }
 
 /* ---------- airfield board (project list) ---------- */
 .board { border-top: 1px solid var(--ink); }
@@ -240,6 +272,10 @@ a.board-row:hover { background: var(--paper-2); }
 .band { background: var(--ink); color: var(--paper); padding-block: clamp(56px, 7vw, 96px); border-bottom: 1px solid var(--night-rule); }
 .band .label { color: var(--night-2); }
 .band .lede { color: var(--night-2); }
+.band.light { background: var(--paper-2); color: var(--ink); border-bottom: 0; }
+.band.light .label, .band.light .lede { color: var(--ink-2); }
+.band.light .btn { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.band.light .btn:hover { background: transparent; color: var(--ink); }
 .band-inner { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
 .band-inner .stack { max-width: 44rem; }
 
@@ -254,6 +290,8 @@ a.board-row:hover { background: var(--paper-2); }
 .field textarea { min-height: 140px; resize: vertical; border: 1px solid var(--ink); border-radius: var(--radius); padding: 12px; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; background: var(--paper-2); }
 .row-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.btn:disabled { opacity: 0.6; cursor: wait; }
 .form-msg { font-size: 0.95rem; border-left: 2px solid var(--ink); padding: 4px 0 4px 14px; }
 .contact-list { display: grid; gap: 28px; }
 .contact-list > div { display: grid; gap: 6px; border-top: 1px solid var(--ink); padding-top: 14px; }
@@ -283,6 +321,12 @@ a.board-row:hover { background: var(--paper-2); }
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   .split, .hero-row, .section-head { grid-template-columns: minmax(0, 1fr); }
+  .scrolly-grid { grid-template-columns: minmax(0, 1fr); }
+  .scrolly-art { order: -1; }
+  /* On narrow screens only the current step shows under the drawing. */
+  .scrolly.is-live .scrolly-steps li { display: none; }
+  .scrolly.is-live .scrolly-steps li.is-on { display: grid; }
+  .scrolly.is-live .scrolly-stage { align-items: start; padding-top: 72px; }
   .board-row { grid-template-columns: 5.5rem minmax(0, 1fr); }
   .board-scope, .board-row .status { grid-column: 2; }
   .people { grid-template-columns: minmax(0, 1fr); }
